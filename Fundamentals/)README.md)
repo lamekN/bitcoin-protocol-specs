@@ -1,1 +1,7 @@
+# Bitcoin Fundamentals: Identity & Ownership
 
+This section covers the foundational cryptographic and ledger-based rules of the Bitcoin protocol. 
+
+## 🏗️ Research Topics
+* **[Identity Derivation](./identity-derivation.md):** A visual breakdown of the secp256k1 elliptic curve and the hashing heuristics (SHA-256/RIPEMD-160) used to create pseudonymous identities.
+* **[The UTXO Model](./utxo-model.md):** Analyzing the "Unspent Transaction Output" architecture, focusing on input-output parity and miner fee calculation.
