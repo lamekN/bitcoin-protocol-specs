@@ -1,34 +1,23 @@
-"""
-Parses raw TX JSON from bitcoin-cli or mempool.
-"""
 import json
+import sys
 
-def decode_tx(data):
-    txid = data.get('txid')
-    vsize = data.get('vsize')
+def run_decode(tx_data):
+    print(f"TXID: {tx_data['txid']}")
+    print(f"vSize: {tx_data['vsize']} vB")
     
-    print(f"\nTX: {txid[:12]}...")
-    print(f"Size: {vsize} vB")
-    
-    print("\nInputs:")
-    for vin in data.get('vin', []):
-        print(f"  - {vin.get('txid')[:8]}...:{vin.get('vout')}")
-        
-    print("\nOutputs:")
-    for vout in data.get('vout', []):
-        addr = vout.get('scriptPubKey', {}).get('address', 'OP_RETURN/Unknown')
-        print(f"  - {vout.get('value'):.8f} BTC -> {addr}")
+    # Simple loop for outputs
+    for out in tx_data['vout']:
+        print(f"  - {out['value']:.8f} BTC -> {out['scriptPubKey']['address'][:15]}...")
 
-# Mock data (Signet P2TR)
+# Mock for testing without a node
 mock = {
     "txid": "7b1eabe0209b1fe794124575ef807057c77ada2138ae4fa8d6c4de0398a14f3f",
     "vsize": 141,
-    "vin": [{"txid": "3f4fa19803dec4d6a84fae3821da7ac7577080ef75451294e71f9b20e0ab1e7b", "vout": 0}],
     "vout": [
-        {"value": 0.45, "scriptPubKey": {"address": "bcrt1p9sz...p9z5"}},
-        {"value": 0.049, "scriptPubKey": {"address": "bcrt1qmx..."}}
+        {"value": 10.5, "scriptPubKey": {"address": "bcrt1qmx7890..."}},
+        {"value": 0.49997180, "scriptPubKey": {"address": "bcrt1p9sz4z7p..."}}
     ]
 }
 
 if __name__ == "__main__":
-    decode_tx(mock)
+    run_decode(mock)
