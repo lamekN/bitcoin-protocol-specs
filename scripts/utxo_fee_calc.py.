@@ -1,0 +1,43 @@
+"""
+Bitcoin UTXO Fee Calculator
+---------------------------
+This script validates the logic of the 'Melting Furnace' (UTXO) design.
+In Bitcoin, the miner fee is not explicitly defined in the transaction data. 
+It is the implicit difference between total inputs and total outputs.
+"""
+
+def calculate_implicit_fee(inputs, outputs):
+    """
+    Calculates the miner fee as the remainder of inputs minus outputs.
+    :param inputs: List of floats (BTC values)
+    :param outputs: List of floats (BTC values)
+    :return: Float (Fee in BTC)
+    """
+    total_in = sum(inputs)
+    total_out = sum(outputs)
+    
+    # Implicit Fee Calculation
+    fee = total_in - total_out
+    
+    # We round to 8 decimal places (standard Bitcoin precision/Satoshis)
+    return round(fee, 8)
+
+# --- Test Case: Validating Design 2 (The Melting Furnace) ---
+# Inputs from your design: 0.5 BTC, 0.2 BTC, 0.1 BTC
+design_inputs = [0.5, 0.2, 0.1] 
+
+# Outputs from your design: 0.75 BTC (Payment) and 0.045 BTC (Change)
+design_outputs = [0.75, 0.045]
+
+calculated_fee = calculate_implicit_fee(design_inputs, design_outputs)
+
+print("--- Bitcoin Protocol Logic Verification ---")
+print(f"Total Inputs:  {sum(design_inputs):.3f} BTC")
+print(f"Total Outputs: {sum(design_outputs):.3f} BTC")
+print(f"Calculated Fee: {calculated_fee:.3f} BTC")
+
+# Assertion to ensure design accuracy
+if calculated_fee == 0.005:
+    print("\n✅ Verification Successful: Logic matches 'Melting Furnace' design.")
+else:
+    print("\n❌ Logic Error: Fee does not match design values.")
