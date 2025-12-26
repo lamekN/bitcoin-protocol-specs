@@ -1,24 +1,20 @@
 import requests
-import sys
 
-# mempool.space is the standard for most dev tools
-URL = "https://mempool.space/api/v1/fees/recommended"
+# Recommended fees from mempool.space
+API_URL = "https://mempool.space/api/v1/fees/recommended"
 
-def get_fees():
+def fetch_fees():
     try:
-        r = requests.get(URL, timeout=5)
+        r = requests.get(API_URL, timeout=5)
         r.raise_for_status()
-        data = r.json()
+        res = r.json()
         
-        print("\n[mempool.space] Current Sat/vB")
-        print(f"  Fast: {data['fastestFee']}")
-        print(f"  Med:  {data['halfHourFee']}")
-        print(f"  Low:  {data['hourFee']}")
-        print(f"  Min:  {data['minimumFee']}")
+        print(f"High: {res['fastestFee']} sat/vB")
+        print(f"Med:  {res['halfHourFee']} sat/vB")
+        print(f"Low:  {res['hourFee']} sat/vB")
         
     except Exception as e:
-        print(f"![Error] API unreachable: {e}")
-        sys.exit(1)
+        print(f"Network error: {e}")
 
 if __name__ == "__main__":
-    get_fees()
+    fetch_fees()
