@@ -1,18 +1,51 @@
-# ₿itcoin Protocol Specification & Research Log
+Bitcoin Protocol Research & Tooling
+Technical workspace for the ₿OSS 2026 application. This repository contains protocol verification scripts, Bitcoin Core PR reviews, and local regtest simulation logs.
 
-This repository serves as a technical archive of my research into Bitcoin's core privacy, scalability, and security protocols. My objective is to bridge the gap between high-level cryptographic theory and intuitive visual logic through BIP-focused documentation and logic verification.
+Project Structure
+cli/: Raw terminal logs from bitcoin-cli sessions. Includes wallet initialization, UTXO management, and P2TR (Taproot) transaction construction.
 
----
+scripts/: Python-based utility scripts for protocol math.
 
-## 📂 Project Navigation
+fee_logic.py: Verification of implicit miner fees.
 
-### 🛡️ Fundamentals
-* **[Identity Derivation](./Fundamentals/identity-derivation.md):** A visual breakdown of the one-way mathematical flow from 256-bit entropy to a Native SegWit address via secp256k1 point multiplication.
-* **[UTXO Model](./Fundamentals/utxo-model.md):** Analyzing the "Unspent Transaction Output" architecture, focusing on input consumption and implicit miner fee calculation.
+weight_check.py: BIP-341 weight unit and vSize calculations.
 
-### 🏗️ Advanced BIP Specifications
-* **[BIP 341: Taproot](./BIP-Specs/taproot-logic.md):** Visualizing Merkle Alternative Script Trees (MAST) and the Key Tweak mechanism where the Output Key $Q$ is derived as $Q = P + h(P||m)G$.
-* **[BIP 352: Silent Payments](./BIP-Specs/silent-payments.md):** Documentation of non-interactive privacy schemas and shared secret derivation using Elliptic Curve Diffie-Hellman (ECDH).
+tx_decode.py: Local parser for raw transaction hex/JSON.
 
-### 💻 Functional Logic & Tooling
-* **[UTXO Fee Engine](./scripts/utxo_fee_calc.py):** A Python-based verification script that validates the "Melting Furnace" transaction logic used in my technical designs.
+analysis/: Cross-verification reports. This folder contains the results of running scripts/ against cli/ data to ensure theoretical models match node behavior.
+
+docs/: Technical breakdowns of BIPs (341, 352, 141) and Lightning Network specifications.
+
+reviews/: Deep dives and peer reviews of specific Bitcoin Core Pull Requests.
+
+Featured Analysis: Taproot vSize Audit
+I developed a suite of tools to verify the fee efficiency of Taproot Key-path spends.
+
+The Workflow:
+
+Created a P2TR transaction in a local regtest environment.
+
+Exported the raw transaction data.
+
+Used scripts/weight_check.py to predict the weight.
+
+Validated the prediction against the node's getmempoolentry output.
+
+Result: Confirmed 141 vB for a standard 1-in, 2-out spend, verifying the 64-byte Schnorr signature footprint.
+Usage (Local Dev)
+To run the fee verification script:
+
+Bash
+
+python3 scripts/fee_logic.py
+To audit a raw transaction JSON:
+
+Bash
+
+python3 scripts/tx_decode.py cli/raw_tx.json
+Goals
+Contribute to Bitcoin Core through technical peer review.
+
+Develop localized tools for the African Bitcoin ecosystem.
+
+Deepen understanding of L2 scaling solutions (Lightning, Ark).
